@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ArticlesRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArticlesRepository::class)]
@@ -14,51 +15,67 @@ class Articles
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $picture = null;
+    private ?string $title = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Users $no = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $content = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $contenant = null;
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $author = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPicture(): ?string
+    public function getTitle(): ?string
     {
-        return $this->picture;
+        return $this->title;
     }
 
-    public function setPicture(string $picture): self
+    public function setTitle(string $title): self
     {
-        $this->picture = $picture;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getNo(): ?Users
+    public function getContent(): ?string
     {
-        return $this->no;
+        return $this->content;
     }
 
-    public function setNo(?Users $no): self
+    public function setContent(string $content): self
     {
-        $this->no = $no;
+        $this->content = $content;
 
         return $this;
     }
 
-    public function getContenant(): ?string
+    public function getAuthor(): ?Users
     {
-        return $this->contenant;
+        return $this->author;
     }
 
-    public function setContenant(string $contenant): self
+    public function setAuthor(?Users $author): self
     {
-        $this->contenant = $contenant;
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
